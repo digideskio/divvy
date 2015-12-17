@@ -18,7 +18,12 @@ object Divvy {
   }
 }
 
-class Divvy(participants: Seq[String], spend: Seq[Spend], verbose: Boolean = false) {
+class Divvy(participants: Seq[String], rawSpend: Seq[Spend], verbose: Boolean = false) {
+  val spend = rawSpend.filter {
+    case Spend(c, _, _, d) if d.size == 1 => c != d.head
+    case _ => true
+  }
+
   require(
     spend.flatMap { _.debtors }.distinct.diff(participants).isEmpty,
     "debtors must be participants"
