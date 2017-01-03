@@ -86,8 +86,8 @@ class Divvy(participants: Seq[String], rawSpend: Seq[Spend], verbose: Boolean = 
     echo(s"Participants: ${participants.sorted.mkString(", ")}")
 
     echo("Spent:")
-    creditors.foreach { case Creditor(name, _) =>
-      echo(s"  $name spent ${spentPerPerson.getOrElse(name, Amount.zero)}")
+    spentPerPerson.foreach { case (name, amt) =>
+      echo(s"  $name spent $amt")
     }
 
     echo("Shares:")
