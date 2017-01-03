@@ -42,7 +42,7 @@ case class Amount(inCents: Int) {
       if (sum > this) {
         ((sum - this).inCents, -Amount.cent)
       } else {
-	((this - sum).inCents, Amount.cent)
+        ((this - sum).inCents, Amount.cent)
       }
 
     val result =

@@ -14,7 +14,7 @@ case class Matrix(
     val relationships =
       stillDebtors.flatMap { d =>
         stillCreditors.map { c =>
-	  d -> c
+          d -> c
         }
       }
 
@@ -49,10 +49,10 @@ case class Matrix(
     val newDebtors =
       debtors.map { d =>
         if (d == debtor) {
-	  d.pays(amount)
-	} else {
+          d.pays(amount)
+        } else {
           d
-	}
+        }
       }
 
     val newCreditors =
