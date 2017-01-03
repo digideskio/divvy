@@ -46,17 +46,23 @@ class Parser extends RegexParsers {
 
   def newLine: Parser[String] = literal("\n")
 
-  def spend: Parser[Spend] =
-    name ~ spentAmount ~ opt(forPeople) ~ onDesc ^^ {
+  def newLines: Parser[String] = rep1(newLine) ^^ { _ => "\n" }
+
+  def comment: Parser[Option[Spend]] = (literal("#") ~ rep(notWhiteSpace) <~ newLines) ^^ { _ =>
+    None
+  }
+
+  def spend: Parser[Option[Spend]] =
+    name ~ spentAmount ~ opt(forPeople) ~ onDesc <~ newLines ^^ {
       case name ~ amount ~ Some(people) ~ desc =>
-        Spend(name, amount, desc, people)
+        Some(Spend(name, amount, desc, people))
       case name ~ amount ~ None ~ desc =>
-        Spend(name, amount, desc, Seq.empty)
+        Some(Spend(name, amount, desc, Seq.empty))
     }
 
-  def spends: Parser[List[Spend]] = repsep(spend, "\n")
+  def spends: Parser[List[Spend]] = rep(spend | comment) ^^ { _.flatten }
 
-  def participants: Parser[List[String]] = "participants:" ~> names <~ newLine
+  def participants: Parser[List[String]] = "participants:" ~> names <~ newLines
 
   def participantsAndSpends: Parser[(List[String], List[Spend])] =
     opt(participants) ~ spends ^^ {
@@ -77,4 +83,6 @@ class Parser extends RegexParsers {
   }
 
   override val whiteSpace = """[ \t\x0B\f\r]+""".r
+
+  val notWhiteSpace = """[^ \t\x0B\f\r\n]+""".r
 }
