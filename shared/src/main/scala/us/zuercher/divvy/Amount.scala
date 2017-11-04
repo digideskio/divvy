@@ -1,7 +1,9 @@
 package us.zuercher.divvy
 
+import scala.scalajs.js.annotation._
 import scala.util.Random
 
+@JSExportTopLevel("divvy.Amount")
 case class Amount(inCents: Int) {
   def this(d: Int, c: Int) =
     this((math.abs(d) * 100 + math.abs(c)) * (math.signum(d) | 1))
@@ -68,6 +70,7 @@ case class Amount(inCents: Int) {
   }
 }
 
+@JSExportTopLevel("divvy.AmountFactory")
 object Amount {
   val DollarsAndCents = """^\$?([0-9]+)\.([0-9]{2})$""".r
   val Dollars = """^\$?([0-9]+)$""".r
@@ -77,6 +80,7 @@ object Amount {
 
   val cent = Amount(1)
 
+  @JSExport
   def fromString(str: String): Amount = {
     str match {
       case DollarsAndCents(d, c) => new Amount(d.toInt, c.toInt)

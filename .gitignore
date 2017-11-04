@@ -1,5 +1,5 @@
 *~
 project/
 target/
-*.wwf
-!empty.wwf
+js/target/
+jvm/target/
