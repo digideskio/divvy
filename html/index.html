@@ -8,13 +8,69 @@
 <body>
   <h1>Divvy</h1>
 
-  <p>Add expenses and hit recalculate to produce a list of payments.</p>
+  <h2>What is this?</h2>
 
-  <button id="add">Add Expense</button>
-  <button id="recalc">Recalculate</button>
+  <p>Divvy calculates payments between parties for complex
+  expenditures, typically on an event. Participants are people who
+  took part in the event and are collectively responsible for the
+  event's expenses. Creditors are people, usually but not necessarily
+  participants, who are owed money for expenses associated with the
+  event. They may also have contributed time or goods with an
+  agreed-upon value. Debtors are participants who owe money for expenses.</p>
 
-  <table id="expenses"></table>
+  <p>Each expense requires a creditor, an amount, and one or more
+  debtors. By default, the debtors are all participants, but you can
+  include only specific participants for a specific expense. For
+  example, if a subset of participants went out to dinner during the
+  event and wish to split the cost as part of the final tally.</p>
 
+  <h2>Let's do it</h2>
+
+  <form id="cx" class="updates" action="">
+  <table id="creditors" summary="Event creditors are defined in this table.">
+    <thead>
+      <tr>
+        <th>Creditor</th>
+        <th>Participant?</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="input">
+        <td><input name="creditor" type="text" title="The creditor's name" /></td>
+        <td><input name="participant" type="checkbox" title="Participants pay for expenses." checked="true" /></td>
+        <td><button type="button" class="add_creditor">Add Creditor</button></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  </form>
+
+  <form id="ex" class="updates" action="">
+  <table id="expenses" summary="Event expenses are defined in this table.">
+    <thead>
+      <tr>
+        <th>Creditor</th>
+        <th>Amount</th>
+        <th>Description</th>
+        <th>Debtors</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="input">
+        <td><select title="The expense's creditor." name="ex.creditor"></select></td>
+        <td><input type="text" title="The expense amount." name="ex.amount" /></td>
+        <td><input type="text" title="A description of the expense." name="ex.description" /></td>
+        <td><select title="Debtors responsible for this expense." name="ex.debtors" title="Who owes for this item?" multiple="true"><option value="@ALL@" selected>All Partcipants</option></select></td>
+        <td><button type="button" class="add_expense">Add Expense</button></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  </form>
 
   <script type="text/javascript" src="scripts/divvy-fastopt.js"></script>
 </body>

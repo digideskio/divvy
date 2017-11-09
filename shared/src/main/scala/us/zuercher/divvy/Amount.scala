@@ -76,17 +76,22 @@ object Amount {
   val Dollars = """^\$?([0-9]+)$""".r
   val Cents = """^\$?\.([0-9]{2})$""".r
 
+  @JSExport
   val zero = Amount(0)
 
   val cent = Amount(1)
 
-  @JSExport
-  def fromString(str: String): Amount = {
+  def maybeFromString(str: String): Option[Amount] = {
     str match {
-      case DollarsAndCents(d, c) => new Amount(d.toInt, c.toInt)
-      case Dollars(d)            => new Amount(d.toInt, 0)
-      case Cents(c)              => Amount(c.toInt)
+      case DollarsAndCents(d, c) => Some(new Amount(d.toInt, c.toInt))
+      case Dollars(d)            => Some(new Amount(d.toInt, 0))
+      case Cents(c)              => Some(Amount(c.toInt))
+      case _                     => None
     }
+  }
+
+  def fromString(str: String): Amount = {
+    maybeFromString(str).getOrElse(zero)
   }
 
   def lt(a: Amount, b: Amount) = a < b
