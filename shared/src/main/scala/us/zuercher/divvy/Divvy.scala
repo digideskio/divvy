@@ -1,26 +1,18 @@
 package us.zuercher.divvy
 
-import scala.scalajs.js.annotation._
-
-@JSExportTopLevel("divvy.Creditor")
 case class Creditor(name: String, amount: Amount) {
   def isPaid(payment: Amount) = Creditor(name, amount + payment)
 }
 
-@JSExportTopLevel("divvy.Debtor")
 case class Debtor(name: String, amount: Amount) {
   def pays(payment: Amount) = Debtor(name, amount - payment)
 }
 
-@JSExportTopLevel("divvy.Relationship")
 case class Relationship(debtor: String, creditor: String)
 
-@JSExportTopLevel("divvy.Payment")
 case class Payment(parties: Relationship, amount: Amount)
 
-@JSExportTopLevel("Divvy")
 object Divvy {
-  @JSExport("apply")
   def apply(participants: Seq[String], spend: Seq[Spend], verbose: Boolean): Seq[Payment] = {
     val d = new Divvy(participants, spend, verbose)
     d()
@@ -28,6 +20,8 @@ object Divvy {
 }
 
 class Divvy(participants: Seq[String], rawSpend: Seq[Spend], verbose: Boolean = false) {
+  Amount.reset()
+
   val spend = rawSpend.filter {
     case Spend(c, _, _, d) if d.size == 1 => c != d.head
     case _ => true

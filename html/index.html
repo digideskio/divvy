@@ -4,6 +4,78 @@
   <meta charset="utf-8" />
   <title>Divvy</title>
   <script type="text/javascript" src="scripts/divvy-jsdeps.js"></script>
+  <style>
+    body {
+      font-family: "San Francisco",Helvetica,Arial,sans-serif;
+    }
+
+    h1 {
+      font-size: 2em;
+      font-weight: normal;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      font-weight: normal;
+      margin-left: 0.5em;
+    }
+
+    p, div.instructions {
+      font-size: 1em;
+      margin-left: 1.5em;
+    }
+
+    div.instructions {
+      margin-top: 1.5em;
+    }
+
+    div.instructions span {
+      text-decoration: underline;
+    }
+
+    div.permalink {
+      width: 50em;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    div.error {
+      font-size: 1em;
+      color: red;
+    }
+
+    table {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      margin-left: 2em;
+      border-spacing: 0;
+    }
+
+    table thead tr {
+      background-color: #ccc;
+    }
+
+    table td, th {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.2em 0.2em;
+    }
+
+    table.std tr:nth-child(even) {
+      background-color: #eee;
+    }
+
+    table.results tr.even {
+      background-color: #eee;
+    }
+
+    table td {
+      text-align: left;
+      vertical-align: top;
+    }
+
+  </style>
 </head>
 <body>
   <h1>Divvy</h1>
@@ -26,13 +98,15 @@
 
   <h2>Let's do it</h2>
 
-  <form id="cx" class="updates" action="">
-  <table id="creditors" summary="Event creditors are defined in this table.">
+  <div class="instructions"><span>Step 1:</span> Add the names of every one who paid and/or owes money
+  and whether they were a participant (owes) or not.</div>
+
+  <form id="cx" action="" method="post">
+  <table id="creditors" class="std" summary="Event creditors are defined in this table.">
     <thead>
       <tr>
         <th>Creditor</th>
         <th>Participant?</th>
-        <th></th>
         <th></th>
       </tr>
     </thead>
@@ -40,15 +114,19 @@
       <tr class="input">
         <td><input name="creditor" type="text" title="The creditor's name" /></td>
         <td><input name="participant" type="checkbox" title="Participants pay for expenses." checked="true" /></td>
-        <td><button type="button" class="add_creditor">Add Creditor</button></td>
-        <td></td>
+        <td>
+          <button type="button" class="add_creditor">Add Creditor</button>
+          <div id="creditor_error" class="error"></div>
+        </td>
       </tr>
     </tbody>
   </table>
   </form>
 
-  <form id="ex" class="updates" action="">
-  <table id="expenses" summary="Event expenses are defined in this table.">
+  <div class="instructions"><span>Step 2:</span> Enter the amounts every one spent and indicate who owes money for the expense.</div>
+
+  <form id="ex" action="" method="post">
+  <table id="expenses" class="std" summary="Event expenses are defined in this table.">
     <thead>
       <tr>
         <th>Creditor</th>
@@ -56,21 +134,50 @@
         <th>Description</th>
         <th>Debtors</th>
         <th></th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
       <tr class="input">
         <td><select title="The expense's creditor." name="ex.creditor"></select></td>
-        <td><input type="text" title="The expense amount." name="ex.amount" /></td>
+        <td>$<input type="text" title="The expense amount." name="ex.amount" /></td>
         <td><input type="text" title="A description of the expense." name="ex.description" /></td>
         <td><select title="Debtors responsible for this expense." name="ex.debtors" title="Who owes for this item?" multiple="true"><option value="@ALL@" selected>All Partcipants</option></select></td>
-        <td><button type="button" class="add_expense">Add Expense</button></td>
-        <td></td>
+        <td>
+          <button type="button" class="add_expense">Add Expense</button>
+          <div id="expense_error" class="error"></div>
+        </td>
       </tr>
     </tbody>
   </table>
   </form>
+
+  <div class="instructions"><span>Step 3:</span> Payments</div>
+
+  <table id="results" class="results" summary="Payments">
+    <thead>
+      <tr>
+        <th>Particpant</th>
+        <th>Owes</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody />
+  </table>
+
+  <h2>Permanent Link</h2>
+
+  <p>
+    This link contains all the information on this page and can be
+    used to send the current contents of the page to someone.
+  </p>
+
+  <div id="link" class="instructions">
+    <a href="."><div class="permalink"></div></a>
+  </div>
+
+  <h2>Start Over</h2>
+
+  <p><button class="restart">Start Over</button></p>
 
   <script type="text/javascript" src="scripts/divvy-fastopt.js"></script>
 </body>

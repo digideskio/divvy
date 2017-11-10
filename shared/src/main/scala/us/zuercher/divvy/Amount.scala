@@ -1,9 +1,8 @@
 package us.zuercher.divvy
 
-import scala.scalajs.js.annotation._
+import scala.collection.mutable
 import scala.util.Random
 
-@JSExportTopLevel("divvy.Amount")
 case class Amount(inCents: Int) {
   def this(d: Int, c: Int) =
     this((math.abs(d) * 100 + math.abs(c)) * (math.signum(d) | 1))
@@ -51,7 +50,7 @@ case class Amount(inCents: Int) {
       Seq.fill(numToAdjust)(base + adjustment) ++
       Seq.fill(n - numToAdjust)(base)
 
-    Random.shuffle(result)
+    Amount.splitRNG(this, n).shuffle(result)
   }
 
   def >(other: Amount) = this.inCents > other.inCents
@@ -70,13 +69,11 @@ case class Amount(inCents: Int) {
   }
 }
 
-@JSExportTopLevel("divvy.AmountFactory")
 object Amount {
   val DollarsAndCents = """^\$?([0-9]+)\.([0-9]{2})$""".r
   val Dollars = """^\$?([0-9]+)$""".r
   val Cents = """^\$?\.([0-9]{2})$""".r
 
-  @JSExport
   val zero = Amount(0)
 
   val cent = Amount(1)
@@ -95,4 +92,22 @@ object Amount {
   }
 
   def lt(a: Amount, b: Amount) = a < b
+
+  private val rngCounter = mutable.Map[Int, Int]()
+
+  def reset() {
+    rngCounter.clear()
+  }
+
+  private[Amount] def splitRNG(a: Amount, n: Int): Random = {
+    val seed = a.inCents * n
+    rngCounter.get(seed) match {
+      case Some(count) =>
+        rngCounter(seed) = count + 1
+        new Random(seed + count)
+      case None =>
+        rngCounter(seed) = 1
+        new Random(seed)
+    }
+  }
 }

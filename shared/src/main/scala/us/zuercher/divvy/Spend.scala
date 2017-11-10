@@ -1,9 +1,7 @@
 package us.zuercher.divvy
 
-import scala.scalajs.js.annotation._
 import java.io.{File, FileReader, Reader}
 
-@JSExportTopLevel("divvy.Spend")
 case class Spend(
   creditor: String,
   amount: Amount,

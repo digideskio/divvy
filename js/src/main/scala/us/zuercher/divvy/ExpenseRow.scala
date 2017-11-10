@@ -17,7 +17,8 @@ object ExpenseRow {
       return Left("No amount given.")
     }
 
-    if (amount.flatMap(Amount.maybeFromString(_)).isEmpty) {
+    val amountValue = amount.flatMap(Amount.maybeFromString(_))
+    if (amountValue.isEmpty) {
       return Left("Invalid amount given.")
     }
 
@@ -31,13 +32,25 @@ object ExpenseRow {
     if (debtors.isEmpty) {
       return Left("No debtor(s) selected.")
     }
+    insert(inputRow, creditors, creditor.get, amountValue.get, desc, debtors.toSeq)
 
-    val newRow = jQuery(expenseRowTemplate.format(amount.get, desc))
+    Right(ExpenseRow(creditor.get, amountValue.get, desc, debtors.toSeq))
+  }
+
+  def insert(
+    inputRow: JQuery,
+    creditors: Seq[CreditorRow],
+    creditor: String,
+    amount: Amount,
+    desc: String,
+    debtors: Seq[String])
+  {
+    val newRow = jQuery(expenseRowTemplate.format(amount, desc))
     val credInput = jQuery("""select[name="ex.creditor"]""", newRow)
     credInput.empty()
     credInput.append(
       js.Array(creditors.map { c => jQuery(expenseMemberTemplate.format(c.name)) }: _*))
-    credInput.value(creditor.get)
+    credInput.value(creditor)
     credInput.change(() => DOM.updateExpenses())
 
     val amountInput = jQuery("""input[name="ex.amount"]""", newRow)
@@ -58,8 +71,6 @@ object ExpenseRow {
 
     newRow.insertBefore(inputRow)
     jQuery("button.remove_expense", newRow).click((event: Event) => DOM.removeExpenseRow(event))
-
-    Right(ExpenseRow(creditor.get, amount.get, desc, debtors.toSeq))
   }
 
   def all: Seq[ExpenseRow] = {
@@ -67,7 +78,10 @@ object ExpenseRow {
     var c = Seq[ExpenseRow]()
     rows.each((row: Element) => {
       val creditor = jQuery("""td select[name="ex.creditor"]""", row).value().toString()
-      val amount = jQuery("""td input[name="ex.amount"]""", row).value().toString()
+      val amount =
+        Amount.maybeFromString(
+          jQuery("""td input[name="ex.amount"]""", row).value().toString()
+        ).getOrElse(Amount.zero)
       val desc = jQuery("""td input[name="ex.description"]""", row).value().toString()
       val debtors =
         jQuery("""td select[name="ex.debtors"]""", row).value().asInstanceOf[js.Array[String]]
@@ -113,7 +127,7 @@ object ExpenseRow {
   }
 
   def setError(inputRow: JQuery, error: String) {
-    jQuery("td:last", inputRow).text(error)
+    jQuery("div#expense_error", inputRow).text(error)
   }
 
   def reset(inputRow: JQuery) {
@@ -125,13 +139,43 @@ object ExpenseRow {
     setError(inputRow, "")
   }
 
+  def unapply(input: String): Option[ExpenseRow] = {
+    if (!input.startsWith("E(") || !input.endsWith(")")) {
+      return None
+    }
+
+    val parts = input.drop(2).dropRight(1).split(";")
+    if (parts.length != 4) {
+      return None
+    }
+
+    val name = EncodedString.decode(parts.head)
+    val amount = EncodedString.decode(parts(1))
+    val desc = EncodedString.decode(parts(2))
+
+    if (!parts(3).startsWith("[") || !parts(3).endsWith("]")) {
+      return None
+    }
+
+    val debtors = parts(3).drop(1).dropRight(1).split(",").map(EncodedString.decode(_))
+    if (debtors.isEmpty) {
+      return None
+    }
+
+    val amountVal = Amount.maybeFromString(amount)
+    if (amountVal.isEmpty) {
+      return None
+    }
+
+    return Some(ExpenseRow(name, amountVal.get, desc, debtors))
+  }
+
   private val expenseRowTemplate = """<tr>
     <td><select title="The expense's creditor." name="ex.creditor"></select></td>
-    <td><input type="text" title="The expense amount." name="ex.amount" value="%s"/></td>
+    <td>$<input type="text" title="The expense amount." name="ex.amount" value="%s"/></td>
     <td><input type="text" title="A description of the expense." name="ex.description" value="%s" /></td>
     <td><select title="Debtors responsible for this expense." name="ex.debtors" title="Who owes for this item?" multiple="true">""" + allDebtors + """</select></td>
     <td><button type="button" class="remove_expense">Remove</button></td>
-    <td></td>
 </tr>
 """
 
@@ -143,6 +187,16 @@ object ExpenseRow {
 
 case class ExpenseRow(
   creditor: String,
-  amount: String,
+  amount: Amount,
   description: String,
   debtors: Seq[String])
+{
+  def serialize(): String = {
+    """E(%s;%s;%s;[%s])""".format(
+      EncodedString(creditor),
+      EncodedString(amount.toString()),
+      EncodedString(description),
+      debtors.map(EncodedString(_).toString()).mkString(",")
+    )
+  }
+}
