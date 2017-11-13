@@ -2142,6 +2142,9 @@ function $s_sc_TraversableOnce$class__mkString__sc_TraversableOnce__T__T__T__T($
   var this$2 = this$1.underlying$5;
   return this$2.content$1
 }
+function $s_sc_TraversableOnce$class__reduceLeftOption__sc_TraversableOnce__F2__s_Option($$this, op) {
+  return ($$this.isEmpty__Z() ? $m_s_None$() : new $c_s_Some().init___O($$this.reduceLeft__F2__O(op)))
+}
 function $s_sc_TraversableOnce$class__nonEmpty__sc_TraversableOnce__Z($$this) {
   return (!$$this.isEmpty__Z())
 }
@@ -4313,7 +4316,7 @@ $c_Lus_zuercher_divvy_DOM$.prototype.updateExpenses__V = (function() {
   }));
   var spend = $as_sc_Seq($s_sc_SeqLike$class__sortWith__sc_SeqLike__F2__O(this$4, lt));
   if (spend.nonEmpty__Z()) {
-    var payments = $m_Lus_zuercher_divvy_Divvy$().apply__sc_Seq__sc_Seq__Z__sc_Seq(participants, spend, false);
+    var payments = $m_Lus_zuercher_divvy_Divvy$().apply__sc_Seq__Z__sc_Seq(spend, false);
     var f = new $c_sjsr_AnonFunction1().init___sjs_js_Function1((function(x$11$2) {
       var x$11 = $as_Lus_zuercher_divvy_Payment(x$11$2);
       return x$11.parties$1.debtor$1
@@ -4353,16 +4356,13 @@ $c_Lus_zuercher_divvy_DOM$.prototype.main__AT__V = (function(Args) {
     $m_Lus_zuercher_divvy_DOM$().us$zuercher$divvy$DOM$$addNewExpenseRow__V()
   }));
   (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("button.restart").click((function() {
-    var this$2 = $m_s_Console$();
-    var this$3 = $as_Ljava_io_PrintStream(this$2.outVar$1.v$1);
-    this$3.java$lang$JSConsoleBasedPrintStream$$printString__T__V("what\n");
     var jsx$5 = $m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().location;
-    var this$5 = new $c_sci_StringOps().init___T("%s%s");
+    var this$2 = new $c_sci_StringOps().init___T("%s%s");
     var array = [$m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().location.origin, $as_T($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().location.pathname)];
     var jsx$4 = $m_sjsr_RuntimeString$();
-    var $$this = this$5.repr$1;
-    var this$7 = $m_sc_Seq$();
-    this$7.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom();
+    var $$this = this$2.repr$1;
+    var this$4 = $m_sc_Seq$();
+    this$4.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom();
     var array$1 = [];
     $uI(array.length);
     var i = 0;
@@ -4370,7 +4370,7 @@ $c_Lus_zuercher_divvy_DOM$.prototype.main__AT__V = (function(Args) {
     while ((i < len)) {
       var index = i;
       var arg1 = array[index];
-      var elem = $s_sci_StringLike$class__scala$collection$immutable$StringLike$$unwrapArg__sci_StringLike__O__O(this$5, arg1);
+      var elem = $s_sci_StringLike$class__scala$collection$immutable$StringLike$$unwrapArg__sci_StringLike__O__O(this$2, arg1);
       array$1.push(elem);
       i = ((1 + i) | 0)
     };
@@ -4398,20 +4398,23 @@ $c_Lus_zuercher_divvy_DOM$.prototype.main__AT__V = (function(Args) {
     event$2.preventDefault();
     return false
   }));
+  (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("form#ex select[name=\"ex.debtors\"]").change((function(event$2$1) {
+    $m_Lus_zuercher_divvy_ExpenseRow$().handleDebtorSelect__Lorg_scalajs_dom_raw_Event__V(event$2$1)
+  }));
   (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("button.add_expense").attr("disabled", "disabled");
   var href = $as_T($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().location.href);
-  var this$15 = new $c_sci_StringOps().init___T(href);
-  var $$this$1 = this$15.repr$1;
+  var this$12 = new $c_sci_StringOps().init___T(href);
+  var $$this$1 = this$12.repr$1;
   var len$3 = $uI($$this$1.length);
   var i$2 = 0;
   while (true) {
     if ((i$2 < len$3)) {
-      var arg1$1 = this$15.apply__I__O(i$2);
+      var arg1$1 = this$12.apply__I__O(i$2);
       if ((arg1$1 === null)) {
         var x$1$1 = 0
       } else {
-        var this$19 = $as_jl_Character(arg1$1);
-        var x$1$1 = this$19.value$1
+        var this$16 = $as_jl_Character(arg1$1);
+        var x$1$1 = this$16.value$1
       };
       var jsx$6 = (x$1$1 !== 63)
     } else {
@@ -4424,15 +4427,15 @@ $c_Lus_zuercher_divvy_DOM$.prototype.main__AT__V = (function(Args) {
     }
   };
   var n = i$2;
-  var $$this$2 = this$15.repr$1;
+  var $$this$2 = this$12.repr$1;
   var until = $uI($$this$2.length);
-  var x$2 = $m_sci_StringOps$().slice$extension__T__I__I__T(this$15.repr$1, n, until);
-  var this$23 = new $c_sci_StringOps().init___T(x$2);
-  var $$this$3 = this$23.repr$1;
+  var x$2 = $m_sci_StringOps$().slice$extension__T__I__I__T(this$12.repr$1, n, until);
+  var this$20 = new $c_sci_StringOps().init___T(x$2);
+  var $$this$3 = this$20.repr$1;
   var until$1 = $uI($$this$3.length);
-  var query = $m_sci_StringOps$().slice$extension__T__I__I__T(this$23.repr$1, 1, until$1);
-  var this$27 = new $c_sci_StringOps().init___T(query);
-  var xs = $s_sci_StringLike$class__split__sci_StringLike__C__AT(this$27, 38);
+  var query = $m_sci_StringOps$().slice$extension__T__I__I__T(this$20.repr$1, 1, until$1);
+  var this$24 = new $c_sci_StringOps().init___T(query);
+  var xs = $s_sci_StringLike$class__split__sci_StringLike__C__AT(this$24, 38);
   var elems$2 = [];
   var i$3 = 0;
   var len$4 = xs.u.length;
@@ -4440,18 +4443,18 @@ $c_Lus_zuercher_divvy_DOM$.prototype.main__AT__V = (function(Args) {
     var index$2 = i$3;
     var arg1$2 = xs.get(index$2);
     var param = $as_T(arg1$2);
-    var this$37 = new $c_sci_StringOps().init___T(param);
-    var $$this$4 = this$37.repr$1;
+    var this$34 = new $c_sci_StringOps().init___T(param);
+    var $$this$4 = this$34.repr$1;
     var len$5 = $uI($$this$4.length);
     var i$4 = 0;
     while (true) {
       if ((i$4 < len$5)) {
-        var arg1$3 = this$37.apply__I__O(i$4);
+        var arg1$3 = this$34.apply__I__O(i$4);
         if ((arg1$3 === null)) {
           var x$2$1 = 0
         } else {
-          var this$41 = $as_jl_Character(arg1$3);
-          var x$2$1 = this$41.value$1
+          var this$38 = $as_jl_Character(arg1$3);
+          var x$2$1 = this$38.value$1
         };
         var jsx$7 = (x$2$1 !== 61)
       } else {
@@ -4464,16 +4467,16 @@ $c_Lus_zuercher_divvy_DOM$.prototype.main__AT__V = (function(Args) {
       }
     };
     var n$1 = i$4;
-    var x1 = $s_sc_IndexedSeqOptimized$class__splitAt__sc_IndexedSeqOptimized__I__T2(this$37, n$1);
+    var x1 = $s_sc_IndexedSeqOptimized$class__splitAt__sc_IndexedSeqOptimized__I__T2(this$34, n$1);
     if ((x1 === null)) {
       throw new $c_s_MatchError().init___O(x1)
     };
     var k = $as_T(x1.$$und1__O());
     var v = $as_T(x1.$$und2__O());
-    var this$43 = new $c_sci_StringOps().init___T(v);
-    var $$this$5 = this$43.repr$1;
+    var this$40 = new $c_sci_StringOps().init___T(v);
+    var $$this$5 = this$40.repr$1;
     var until$2 = $uI($$this$5.length);
-    var elem$1 = new $c_T2().init___O__O(k, $m_sci_StringOps$().slice$extension__T__I__I__T(this$43.repr$1, 1, until$2));
+    var elem$1 = new $c_T2().init___O__O(k, $m_sci_StringOps$().slice$extension__T__I__I__T(this$40.repr$1, 1, until$2));
     elems$2.push(elem$1);
     i$3 = ((1 + i$3) | 0)
   };
@@ -4488,9 +4491,9 @@ $c_Lus_zuercher_divvy_DOM$.prototype.main__AT__V = (function(Args) {
     i$5 = ((1 + i$5) | 0)
   };
   var params = $as_sci_Map(b.elems$1);
-  var this$50 = params.get__O__s_Option("data");
-  if ((!this$50.isEmpty__Z())) {
-    var v1 = this$50.get__O();
+  var this$47 = params.get__O__s_Option("data");
+  if ((!this$47.isEmpty__Z())) {
+    var v1 = this$47.get__O();
     var v$1 = $as_T(v1);
     var x1$1 = $m_Lus_zuercher_divvy_Storage$().deserialize__T__T2(v$1);
     if ((x1$1 === null)) {
@@ -4571,9 +4574,9 @@ function $m_Lus_zuercher_divvy_DOM$() {
 /** @constructor */
 function $c_Lus_zuercher_divvy_Divvy() {
   $c_O.call(this);
-  this.us$zuercher$divvy$Divvy$$participants$f = null;
   this.verbose$1 = false;
   this.spend$1 = null;
+  this.participants$1 = null;
   this.nonParticipants$1 = null;
   this.totalSpent$1 = null;
   this.spentPerPerson$1 = null;
@@ -4603,7 +4606,7 @@ $c_Lus_zuercher_divvy_Divvy.prototype.echo__T__V = (function(s) {
 $c_Lus_zuercher_divvy_Divvy.prototype.apply__sc_Seq = (function() {
   this.echo__T__V(new $c_s_StringContext().init___sc_Seq(new $c_sjs_js_WrappedArray().init___sjs_js_Array(["Total Spent: ", ""])).s__sc_Seq__T(new $c_sjs_js_WrappedArray().init___sjs_js_Array([this.totalSpent$1])));
   var jsx$1 = new $c_s_StringContext().init___sc_Seq(new $c_sjs_js_WrappedArray().init___sjs_js_Array(["Participants: ", ""]));
-  var this$1 = this.us$zuercher$divvy$Divvy$$participants$f;
+  var this$1 = this.participants$1;
   var ord = $m_s_math_Ordering$String$();
   this.echo__T__V(jsx$1.s__sc_Seq__T(new $c_sjs_js_WrappedArray().init___sjs_js_Array([$as_sc_TraversableOnce($s_sc_SeqLike$class__sorted__sc_SeqLike__s_math_Ordering__O(this$1, ord)).mkString__T__T(", ")])));
   this.echo__T__V("Spent:");
@@ -4662,8 +4665,7 @@ $c_Lus_zuercher_divvy_Divvy.prototype.apply__sc_Seq = (function() {
   this.echo__T__V(new $c_s_StringContext().init___sc_Seq(new $c_sjs_js_WrappedArray().init___sjs_js_Array(["Total Credit: ", ""])).s__sc_Seq__T(new $c_sjs_js_WrappedArray().init___sjs_js_Array([this.totalCredit$1.unary$und$minus__Lus_zuercher_divvy_Amount()])));
   return $m_Lus_zuercher_divvy_Solver$().apply__sc_Seq__sc_Seq__sc_Seq(this.debtors$1, this.creditors$1)
 });
-$c_Lus_zuercher_divvy_Divvy.prototype.init___sc_Seq__sc_Seq__Z = (function(participants, rawSpend, verbose) {
-  this.us$zuercher$divvy$Divvy$$participants$f = participants;
+$c_Lus_zuercher_divvy_Divvy.prototype.init___sc_Seq__Z = (function(rawSpend, verbose) {
   this.verbose$1 = verbose;
   var this$1 = $m_Lus_zuercher_divvy_Amount$();
   this$1.rngCounter$1.clear__V();
@@ -4676,7 +4678,11 @@ $c_Lus_zuercher_divvy_Divvy.prototype.init___sc_Seq__sc_Seq__Z = (function(parti
         return (c !== d.head__O())
       }
     };
-    return true
+    if ((x0$1 !== null)) {
+      var d$2 = x0$1.debtors$1;
+      return d$2.nonEmpty__Z()
+    };
+    throw new $c_s_MatchError().init___O(x0$1)
   }))));
   var jsx$2 = this.spend$1;
   var jsx$1 = new $c_sjsr_AnonFunction1().init___sjs_js_Function1((function(x$1$2) {
@@ -4684,30 +4690,28 @@ $c_Lus_zuercher_divvy_Divvy.prototype.init___sc_Seq__sc_Seq__Z = (function(parti
     return x$1.debtors$1
   }));
   var this$2 = $m_sc_Seq$();
-  var this$3 = $as_sc_SeqLike($as_sc_SeqLike(jsx$2.flatMap__F1__scg_CanBuildFrom__O(jsx$1, this$2.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).distinct__O());
-  var requirement = $as_sc_SeqLike($s_sc_SeqLike$class__diff__sc_SeqLike__sc_GenSeq__O(this$3, participants)).isEmpty__Z();
-  if ((!requirement)) {
-    throw new $c_jl_IllegalArgumentException().init___T("requirement failed: debtors must be participants")
-  };
+  this.participants$1 = $as_sc_Seq(jsx$2.flatMap__F1__scg_CanBuildFrom__O(jsx$1, this$2.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom()));
   var jsx$4 = this.spend$1;
   var jsx$3 = new $c_sjsr_AnonFunction1().init___sjs_js_Function1((function(x$2$2) {
     var x$2 = $as_Lus_zuercher_divvy_Spend(x$2$2);
     return x$2.creditor$1
   }));
-  var this$5 = $m_sc_Seq$();
-  var this$6 = $as_sc_SeqLike($as_sc_SeqLike(jsx$4.map__F1__scg_CanBuildFrom__O(jsx$3, this$5.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).distinct__O());
-  this.nonParticipants$1 = $as_sc_Seq($s_sc_SeqLike$class__diff__sc_SeqLike__sc_GenSeq__O(this$6, participants));
+  var this$3 = $m_sc_Seq$();
+  var this$4 = $as_sc_SeqLike($as_sc_SeqLike(jsx$4.map__F1__scg_CanBuildFrom__O(jsx$3, this$3.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).distinct__O());
+  var that = this.participants$1;
+  this.nonParticipants$1 = $as_sc_Seq($s_sc_SeqLike$class__diff__sc_SeqLike__sc_GenSeq__O(this$4, that));
   var jsx$6 = this.spend$1;
   var jsx$5 = new $c_sjsr_AnonFunction1().init___sjs_js_Function1((function(x$3$2) {
     var x$3 = $as_Lus_zuercher_divvy_Spend(x$3$2);
     return x$3.amount$1
   }));
-  var this$7 = $m_sc_Seq$();
-  this.totalSpent$1 = $as_Lus_zuercher_divvy_Amount($as_sc_TraversableOnce(jsx$6.map__F1__scg_CanBuildFrom__O(jsx$5, this$7.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).reduceLeft__F2__O(new $c_sjsr_AnonFunction2().init___sjs_js_Function2((function(x$4$2, x$5$2) {
+  var this$5 = $m_sc_Seq$();
+  var this$6 = $as_sc_TraversableOnce(jsx$6.map__F1__scg_CanBuildFrom__O(jsx$5, this$5.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).reduceLeftOption__F2__s_Option(new $c_sjsr_AnonFunction2().init___sjs_js_Function2((function(x$4$2, x$5$2) {
     var x$4 = $as_Lus_zuercher_divvy_Amount(x$4$2);
     var x$5 = $as_Lus_zuercher_divvy_Amount(x$5$2);
     return x$4.$$plus__Lus_zuercher_divvy_Amount__Lus_zuercher_divvy_Amount(x$5)
-  }))));
+  })));
+  this.totalSpent$1 = $as_Lus_zuercher_divvy_Amount((this$6.isEmpty__Z() ? $m_Lus_zuercher_divvy_Amount$().zero$1 : this$6.get__O()));
   this.spentPerPerson$1 = $as_sci_Map(this.spend$1.foldLeft__O__F2__O($m_sci_Map$EmptyMap$(), new $c_Lus_zuercher_divvy_Divvy$$anonfun$7().init___Lus_zuercher_divvy_Divvy(this)));
   this.participantShares$1 = $as_sci_Map(this.spend$1.foldLeft__O__F2__O($m_sci_Map$EmptyMap$(), new $c_Lus_zuercher_divvy_Divvy$$anonfun$9().init___Lus_zuercher_divvy_Divvy(this)));
   var jsx$8 = this.nonParticipants$1;
@@ -4716,14 +4720,14 @@ $c_Lus_zuercher_divvy_Divvy.prototype.init___sc_Seq__sc_Seq__Z = (function(parti
     var y = $m_Lus_zuercher_divvy_Amount$().zero$1;
     return new $c_T2().init___O__O(x$6, y)
   }));
-  var this$12 = $m_sc_Seq$();
-  this.nonParticipantShares$1 = $as_sc_TraversableOnce(jsx$8.map__F1__scg_CanBuildFrom__O(jsx$7, this$12.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).toMap__s_Predef$$less$colon$less__sci_Map($m_s_Predef$().singleton$und$less$colon$less$2);
+  var this$11 = $m_sc_Seq$();
+  this.nonParticipantShares$1 = $as_sc_TraversableOnce(jsx$8.map__F1__scg_CanBuildFrom__O(jsx$7, this$11.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).toMap__s_Predef$$less$colon$less__sci_Map($m_s_Predef$().singleton$und$less$colon$less$2);
   this.shares$1 = this.participantShares$1.$$plus$plus__sc_GenTraversableOnce__sci_Map(this.nonParticipantShares$1);
-  var this$14 = this.shares$1;
+  var this$13 = this.shares$1;
   var f = new $c_Lus_zuercher_divvy_Divvy$$anonfun$12().init___Lus_zuercher_divvy_Divvy(this);
-  var this$13 = $m_sci_Map$();
-  var bf = new $c_scg_GenMapFactory$MapCanBuildFrom().init___scg_GenMapFactory(this$13);
-  var nets = $as_sci_Map($s_sc_TraversableLike$class__map__sc_TraversableLike__F1__scg_CanBuildFrom__O(this$14, f, bf));
+  var this$12 = $m_sci_Map$();
+  var bf = new $c_scg_GenMapFactory$MapCanBuildFrom().init___scg_GenMapFactory(this$12);
+  var netsOwed = $as_sci_Map($s_sc_TraversableLike$class__map__sc_TraversableLike__F1__scg_CanBuildFrom__O(this$13, f, bf));
   var p = new $c_sjsr_AnonFunction1().init___sjs_js_Function1((function(x0$6$2) {
     var x0$6 = $as_T2(x0$6$2);
     if ((x0$6 !== null)) {
@@ -4734,7 +4738,7 @@ $c_Lus_zuercher_divvy_Divvy.prototype.init___sc_Seq__sc_Seq__Z = (function(parti
       throw new $c_s_MatchError().init___O(x0$6)
     }
   }));
-  var x1 = $as_sc_TraversableLike($s_sc_TraversableLike$class__filter__sc_TraversableLike__F1__O(nets, p)).partition__F1__T2(new $c_sjsr_AnonFunction1().init___sjs_js_Function1((function(x0$7$2) {
+  var x1 = $as_sc_TraversableLike($s_sc_TraversableLike$class__filter__sc_TraversableLike__F1__O(netsOwed, p)).partition__F1__T2(new $c_sjsr_AnonFunction1().init___sjs_js_Function1((function(x0$7$2) {
     var x0$7 = $as_T2(x0$7$2);
     if ((x0$7 !== null)) {
       var net$1 = $as_Lus_zuercher_divvy_Amount(x0$7.$$und2__O());
@@ -4758,8 +4762,8 @@ $c_Lus_zuercher_divvy_Divvy.prototype.init___sc_Seq__sc_Seq__Z = (function(parti
       throw new $c_s_MatchError().init___O(x0$8)
     }
   }));
-  var this$15 = $m_sci_Iterable$();
-  var bf$1 = this$15.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom();
+  var this$14 = $m_sci_Iterable$();
+  var bf$1 = this$14.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom();
   var _1 = $as_sc_TraversableOnce($s_sc_TraversableLike$class__map__sc_TraversableLike__F1__scg_CanBuildFrom__O(d$1, f$1, bf$1)).toSeq__sc_Seq();
   var f$2 = new $c_sjsr_AnonFunction1().init___sjs_js_Function1((function(x0$9$2) {
     var x0$9 = $as_T2(x0$9$2);
@@ -4771,8 +4775,8 @@ $c_Lus_zuercher_divvy_Divvy.prototype.init___sc_Seq__sc_Seq__Z = (function(parti
       throw new $c_s_MatchError().init___O(x0$9)
     }
   }));
-  var this$16 = $m_sci_Iterable$();
-  var bf$2 = this$16.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom();
+  var this$15 = $m_sci_Iterable$();
+  var bf$2 = this$15.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom();
   var _2 = $as_sc_TraversableOnce($s_sc_TraversableLike$class__map__sc_TraversableLike__F1__scg_CanBuildFrom__O(c$1, f$2, bf$2)).toSeq__sc_Seq();
   this.x$8$1 = new $c_T2().init___O__O(_1, _2);
   this.debtors$1 = $as_sc_Seq(this.x$8$1.$$und1__O());
@@ -4782,23 +4786,25 @@ $c_Lus_zuercher_divvy_Divvy.prototype.init___sc_Seq__sc_Seq__Z = (function(parti
     var x$9 = $as_Lus_zuercher_divvy_Debtor(x$9$2);
     return x$9.amount$1
   }));
-  var this$17 = $m_sc_Seq$();
-  this.totalDebt$1 = $as_Lus_zuercher_divvy_Amount($as_sc_TraversableOnce(jsx$10.map__F1__scg_CanBuildFrom__O(jsx$9, this$17.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).reduceLeft__F2__O(new $c_sjsr_AnonFunction2().init___sjs_js_Function2((function(x$10$2, x$11$2) {
+  var this$16 = $m_sc_Seq$();
+  var this$17 = $as_sc_TraversableOnce(jsx$10.map__F1__scg_CanBuildFrom__O(jsx$9, this$16.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).reduceLeftOption__F2__s_Option(new $c_sjsr_AnonFunction2().init___sjs_js_Function2((function(x$10$2, x$11$2) {
     var x$10 = $as_Lus_zuercher_divvy_Amount(x$10$2);
     var x$11 = $as_Lus_zuercher_divvy_Amount(x$11$2);
     return x$10.$$plus__Lus_zuercher_divvy_Amount__Lus_zuercher_divvy_Amount(x$11)
-  }))));
+  })));
+  this.totalDebt$1 = $as_Lus_zuercher_divvy_Amount((this$17.isEmpty__Z() ? $m_Lus_zuercher_divvy_Amount$().zero$1 : this$17.get__O()));
   var jsx$12 = this.creditors$1;
   var jsx$11 = new $c_sjsr_AnonFunction1().init___sjs_js_Function1((function(x$12$2) {
     var x$12 = $as_Lus_zuercher_divvy_Creditor(x$12$2);
     return x$12.amount$1
   }));
   var this$18 = $m_sc_Seq$();
-  this.totalCredit$1 = $as_Lus_zuercher_divvy_Amount($as_sc_TraversableOnce(jsx$12.map__F1__scg_CanBuildFrom__O(jsx$11, this$18.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).reduceLeft__F2__O(new $c_sjsr_AnonFunction2().init___sjs_js_Function2((function(x$13$2, x$14$2) {
+  var this$19 = $as_sc_TraversableOnce(jsx$12.map__F1__scg_CanBuildFrom__O(jsx$11, this$18.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).reduceLeftOption__F2__s_Option(new $c_sjsr_AnonFunction2().init___sjs_js_Function2((function(x$13$2, x$14$2) {
     var x$13 = $as_Lus_zuercher_divvy_Amount(x$13$2);
     var x$14 = $as_Lus_zuercher_divvy_Amount(x$14$2);
     return x$13.$$plus__Lus_zuercher_divvy_Amount__Lus_zuercher_divvy_Amount(x$14)
-  }))));
+  })));
+  this.totalCredit$1 = $as_Lus_zuercher_divvy_Amount((this$19.isEmpty__Z() ? $m_Lus_zuercher_divvy_Amount$().zero$1 : this$19.get__O()));
   return this
 });
 var $d_Lus_zuercher_divvy_Divvy = new $TypeData().initClass({
@@ -4822,9 +4828,8 @@ $h_Lus_zuercher_divvy_Divvy$.prototype = $c_Lus_zuercher_divvy_Divvy$.prototype;
 $c_Lus_zuercher_divvy_Divvy$.prototype.init___ = (function() {
   return this
 });
-$c_Lus_zuercher_divvy_Divvy$.prototype.apply__sc_Seq__sc_Seq__Z__sc_Seq = (function(participants, spend, verbose) {
-  var d = new $c_Lus_zuercher_divvy_Divvy().init___sc_Seq__sc_Seq__Z(participants, spend, verbose);
-  return d.apply__sc_Seq()
+$c_Lus_zuercher_divvy_Divvy$.prototype.apply__sc_Seq__Z__sc_Seq = (function(spend, verbose) {
+  return new $c_Lus_zuercher_divvy_Divvy().init___sc_Seq__Z(spend, verbose).apply__sc_Seq()
 });
 var $d_Lus_zuercher_divvy_Divvy$ = new $TypeData().initClass({
   Lus_zuercher_divvy_Divvy$: 0
@@ -10031,14 +10036,6 @@ function $h_Lus_zuercher_divvy_ExpenseRow$() {
   /*<skip>*/
 }
 $h_Lus_zuercher_divvy_ExpenseRow$.prototype = $c_Lus_zuercher_divvy_ExpenseRow$.prototype;
-$c_Lus_zuercher_divvy_ExpenseRow$.prototype.init___ = (function() {
-  $n_Lus_zuercher_divvy_ExpenseRow$ = this;
-  this.expenseRowTemplate$1 = (("<tr>\n    <td><select title=\"The expense's creditor.\" name=\"ex.creditor\"></select></td>\n    <td>$<input type=\"text\" title=\"The expense amount.\" name=\"ex.amount\" value=\"%s\"/></td>\n    <td><input type=\"text\" title=\"A description of the expense.\" name=\"ex.description\" value=\"%s\" /></td>\n    <td><select title=\"Debtors responsible for this expense.\" name=\"ex.debtors\" title=\"Who owes for this item?\" multiple=\"true\">" + this.us$zuercher$divvy$ExpenseRow$$allDebtors$1) + "</select></td>\n    <td><button type=\"button\" class=\"remove_expense\">Remove</button></td>\n</tr>\n");
-  this.us$zuercher$divvy$ExpenseRow$$allDebtorsValue$1 = "@ALL@";
-  this.us$zuercher$divvy$ExpenseRow$$allDebtors$1 = (("<option value=\"" + this.us$zuercher$divvy$ExpenseRow$$allDebtorsValue$1) + "\">All Partcipants</option>");
-  this.us$zuercher$divvy$ExpenseRow$$expenseMemberTemplate$1 = "<option value=\"%1$s\">%1$s</option>";
-  return this
-});
 $c_Lus_zuercher_divvy_ExpenseRow$.prototype.all__sc_Seq = (function() {
   var rows = (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("table#expenses tbody tr[class!=\"input\"]");
   var c = new $c_sr_ObjectRef().init___O($as_sc_Seq($m_sc_Seq$().apply__sc_Seq__sc_GenTraversable($m_sci_Nil$())));
@@ -10048,6 +10045,14 @@ $c_Lus_zuercher_divvy_ExpenseRow$.prototype.all__sc_Seq = (function() {
     })
   })(new $c_Lus_zuercher_divvy_ExpenseRow$$anonfun$all$1().init___sr_ObjectRef(c)));
   return $as_sc_Seq(c.elem$1)
+});
+$c_Lus_zuercher_divvy_ExpenseRow$.prototype.init___ = (function() {
+  $n_Lus_zuercher_divvy_ExpenseRow$ = this;
+  this.expenseRowTemplate$1 = (("<tr>\n    <td><select title=\"The expense's creditor.\" name=\"ex.creditor\"></select></td>\n    <td>$<input type=\"text\" title=\"The expense amount.\" name=\"ex.amount\" value=\"%s\"/></td>\n    <td><input type=\"text\" title=\"A description of the expense.\" name=\"ex.description\" value=\"%s\" /></td>\n    <td><select title=\"Debtors responsible for this expense.\" name=\"ex.debtors\" title=\"Who owes for this item?\" multiple=\"true\">" + this.us$zuercher$divvy$ExpenseRow$$allDebtors$1) + "</select></td>\n    <td><button type=\"button\" class=\"remove_expense\">Remove</button></td>\n</tr>\n");
+  this.us$zuercher$divvy$ExpenseRow$$allDebtorsValue$1 = "@ALL@";
+  this.us$zuercher$divvy$ExpenseRow$$allDebtors$1 = (("<option value=\"" + this.us$zuercher$divvy$ExpenseRow$$allDebtorsValue$1) + "\">All Partcipants</option>");
+  this.us$zuercher$divvy$ExpenseRow$$expenseMemberTemplate$1 = "<option value=\"%1$s\">%1$s</option>";
+  return this
 });
 $c_Lus_zuercher_divvy_ExpenseRow$.prototype.update__sc_Seq__sc_Seq__V = (function(creditorNames, debtorNames) {
   (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("table#expenses tbody tr").each((function(f) {
@@ -10252,69 +10257,58 @@ $c_Lus_zuercher_divvy_ExpenseRow$.prototype.insert__Lorg_scalajs_jquery_JQuery__
     var jsx$24 = result$5
   };
   var jsx$23 = debtInput.val(jsx$24);
-  jsx$23.change((function() {
+  jsx$23.change((function(event$2) {
+    $m_Lus_zuercher_divvy_ExpenseRow$().handleDebtorSelect__Lorg_scalajs_dom_raw_Event__V(event$2);
     $m_Lus_zuercher_divvy_DOM$().updateExpenses__V()
   }));
   newRow.insertBefore(inputRow);
-  (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("button.remove_expense", newRow).click((function(event$2) {
-    $m_Lus_zuercher_divvy_DOM$().removeExpenseRow__Lorg_scalajs_dom_raw_Event__V(event$2)
+  (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("button.remove_expense", newRow).click((function(event$2$1) {
+    $m_Lus_zuercher_divvy_DOM$().removeExpenseRow__Lorg_scalajs_dom_raw_Event__V(event$2$1)
   }))
 });
 $c_Lus_zuercher_divvy_ExpenseRow$.prototype.setError__Lorg_scalajs_jquery_JQuery__T__V = (function(inputRow, error) {
   (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("div#expense_error", inputRow).text(error)
 });
-$c_Lus_zuercher_divvy_ExpenseRow$.prototype.unapply__T__s_Option = (function(input) {
-  if (((!(($uI(input.length) >= 0) && ($as_T(input.substring(0, $uI("E(".length))) === "E("))) || (!$m_sjsr_RuntimeString$().endsWith__T__T__Z(input, ")")))) {
-    return $m_s_None$()
+$c_Lus_zuercher_divvy_ExpenseRow$.prototype.handleDebtorSelect__Lorg_scalajs_dom_raw_Event__V = (function(event) {
+  var target = (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)(event.target);
+  var values = target.val();
+  if (($uI(values.length) > 1)) {
+    var elem = this.us$zuercher$divvy$ExpenseRow$$allDebtorsValue$1;
+    var len = $uI(values.length);
+    var i = 0;
+    while (true) {
+      if ((i < len)) {
+        var index = i;
+        var arg1 = values[index];
+        var jsx$2 = (!$m_sr_BoxesRunTime$().equals__O__O__Z(arg1, elem))
+      } else {
+        var jsx$2 = false
+      };
+      if (jsx$2) {
+        i = ((1 + i) | 0)
+      } else {
+        break
+      }
+    };
+    var jsx$1 = (i !== $uI(values.length))
+  } else {
+    var jsx$1 = false
   };
-  var this$7 = new $c_sci_StringOps().init___T(input);
-  var $$this = this$7.repr$1;
-  var until = $uI($$this.length);
-  var x = $m_sci_StringOps$().slice$extension__T__I__I__T(this$7.repr$1, 2, until);
-  var this$11 = new $c_sci_StringOps().init___T(x);
-  var thiz = $as_T($s_sc_IndexedSeqOptimized$class__dropRight__sc_IndexedSeqOptimized__I__O(this$11, 1));
-  var parts = $m_sjsr_RuntimeString$().split__T__T__I__AT(thiz, ";", 0);
-  if ((parts.u.length !== 4)) {
-    return $m_s_None$()
-  };
-  var jsx$1 = $m_Lus_zuercher_divvy_EncodedString$();
-  var this$14 = new $c_scm_ArrayOps$ofRef().init___AO(parts);
-  var name = jsx$1.decode__T__T($as_T($s_sc_IndexedSeqOptimized$class__head__sc_IndexedSeqOptimized__O(this$14)));
-  var amount = $m_Lus_zuercher_divvy_EncodedString$().decode__T__T(parts.get(1));
-  var desc = $m_Lus_zuercher_divvy_EncodedString$().decode__T__T(parts.get(2));
-  var thiz$1 = parts.get(3);
-  if (((!(($uI(thiz$1.length) >= 0) && ($as_T(thiz$1.substring(0, $uI("[".length))) === "["))) || (!$m_sjsr_RuntimeString$().endsWith__T__T__Z(parts.get(3), "]")))) {
-    return $m_s_None$()
-  };
-  var x$1 = parts.get(3);
-  var this$21 = new $c_sci_StringOps().init___T(x$1);
-  var $$this$1 = this$21.repr$1;
-  var until$1 = $uI($$this$1.length);
-  var x$2 = $m_sci_StringOps$().slice$extension__T__I__I__T(this$21.repr$1, 1, until$1);
-  var this$25 = new $c_sci_StringOps().init___T(x$2);
-  var thiz$2 = $as_T($s_sc_IndexedSeqOptimized$class__dropRight__sc_IndexedSeqOptimized__I__O(this$25, 1));
-  var xs = $m_sjsr_RuntimeString$().split__T__T__I__AT(thiz$2, ",", 0);
-  var elems$2 = [];
-  var i = 0;
-  var len = xs.u.length;
-  while ((i < len)) {
-    var index = i;
-    var arg1 = xs.get(index);
-    var x$9 = $as_T(arg1);
-    var elem = $m_Lus_zuercher_divvy_EncodedString$().decode__T__T(x$9);
-    var unboxedElem = ((elem === null) ? null : elem);
-    elems$2.push(unboxedElem);
-    i = ((1 + i) | 0)
-  };
-  var debtors = $makeNativeArrayWrapper($d_T.getArrayOf(), elems$2);
-  if ((debtors.u.length === 0)) {
-    return $m_s_None$()
-  };
-  var amountVal = $m_Lus_zuercher_divvy_Amount$().maybeFromString__T__s_Option(amount);
-  if (amountVal.isEmpty__Z()) {
-    return $m_s_None$()
-  };
-  return new $c_s_Some().init___O(new $c_Lus_zuercher_divvy_ExpenseRow().init___T__Lus_zuercher_divvy_Amount__T__sc_Seq(name, $as_Lus_zuercher_divvy_Amount(amountVal.get__O()), desc, $m_s_Predef$().wrapRefArray__AO__scm_WrappedArray(debtors)))
+  if (jsx$1) {
+    var array = [];
+    var i$1 = 0;
+    var len$1 = $uI(values.length);
+    while ((i$1 < len$1)) {
+      var index$1 = i$1;
+      var arg1$1 = values[index$1];
+      var x$7 = $as_T(arg1$1);
+      if ((x$7 !== $m_Lus_zuercher_divvy_ExpenseRow$().us$zuercher$divvy$ExpenseRow$$allDebtorsValue$1)) {
+        array.push(arg1$1)
+      };
+      i$1 = ((1 + i$1) | 0)
+    };
+    target.val(array)
+  }
 });
 $c_Lus_zuercher_divvy_ExpenseRow$.prototype.apply__Lorg_scalajs_jquery_JQuery__sc_Seq__s_util_Either = (function(inputRow, creditors) {
   var this$1 = $m_s_Option$().apply__O__s_Option((0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("select[name=\"ex.creditor\"]", inputRow).val());
@@ -10571,16 +10565,70 @@ $c_Lus_zuercher_divvy_ExpenseRow$.prototype.apply__Lorg_scalajs_jquery_JQuery__s
   debtInput.append(jsx$15);
   var jsx$26 = debtors;
   var jsx$25 = debtInput.val(jsx$26);
-  jsx$25.change((function() {
+  jsx$25.change((function(event$2) {
+    $m_Lus_zuercher_divvy_ExpenseRow$().handleDebtorSelect__Lorg_scalajs_dom_raw_Event__V(event$2);
     $m_Lus_zuercher_divvy_DOM$().updateExpenses__V()
   }));
   newRow.insertBefore(inputRow);
-  (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("button.remove_expense", newRow).click((function(event$2) {
-    $m_Lus_zuercher_divvy_DOM$().removeExpenseRow__Lorg_scalajs_dom_raw_Event__V(event$2)
+  (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("button.remove_expense", newRow).click((function(event$2$1) {
+    $m_Lus_zuercher_divvy_DOM$().removeExpenseRow__Lorg_scalajs_dom_raw_Event__V(event$2$1)
   }));
   $m_s_package$();
   var b = new $c_Lus_zuercher_divvy_ExpenseRow().init___T__Lus_zuercher_divvy_Amount__T__sc_Seq($as_T(creditor.get__O()), $as_Lus_zuercher_divvy_Amount(amountValue.get__O()), desc, new $c_sjs_js_WrappedArray().init___sjs_js_Array(debtors));
   return new $c_s_util_Right().init___O(b)
+});
+$c_Lus_zuercher_divvy_ExpenseRow$.prototype.unapply__T__s_Option = (function(input) {
+  if (((!(($uI(input.length) >= 0) && ($as_T(input.substring(0, $uI("E(".length))) === "E("))) || (!$m_sjsr_RuntimeString$().endsWith__T__T__Z(input, ")")))) {
+    return $m_s_None$()
+  };
+  var this$7 = new $c_sci_StringOps().init___T(input);
+  var $$this = this$7.repr$1;
+  var until = $uI($$this.length);
+  var x = $m_sci_StringOps$().slice$extension__T__I__I__T(this$7.repr$1, 2, until);
+  var this$11 = new $c_sci_StringOps().init___T(x);
+  var thiz = $as_T($s_sc_IndexedSeqOptimized$class__dropRight__sc_IndexedSeqOptimized__I__O(this$11, 1));
+  var parts = $m_sjsr_RuntimeString$().split__T__T__I__AT(thiz, ";", 0);
+  if ((parts.u.length !== 4)) {
+    return $m_s_None$()
+  };
+  var jsx$1 = $m_Lus_zuercher_divvy_EncodedString$();
+  var this$14 = new $c_scm_ArrayOps$ofRef().init___AO(parts);
+  var name = jsx$1.decode__T__T($as_T($s_sc_IndexedSeqOptimized$class__head__sc_IndexedSeqOptimized__O(this$14)));
+  var amount = $m_Lus_zuercher_divvy_EncodedString$().decode__T__T(parts.get(1));
+  var desc = $m_Lus_zuercher_divvy_EncodedString$().decode__T__T(parts.get(2));
+  var thiz$1 = parts.get(3);
+  if (((!(($uI(thiz$1.length) >= 0) && ($as_T(thiz$1.substring(0, $uI("[".length))) === "["))) || (!$m_sjsr_RuntimeString$().endsWith__T__T__Z(parts.get(3), "]")))) {
+    return $m_s_None$()
+  };
+  var x$1 = parts.get(3);
+  var this$21 = new $c_sci_StringOps().init___T(x$1);
+  var $$this$1 = this$21.repr$1;
+  var until$1 = $uI($$this$1.length);
+  var x$2 = $m_sci_StringOps$().slice$extension__T__I__I__T(this$21.repr$1, 1, until$1);
+  var this$25 = new $c_sci_StringOps().init___T(x$2);
+  var thiz$2 = $as_T($s_sc_IndexedSeqOptimized$class__dropRight__sc_IndexedSeqOptimized__I__O(this$25, 1));
+  var xs = $m_sjsr_RuntimeString$().split__T__T__I__AT(thiz$2, ",", 0);
+  var elems$2 = [];
+  var i = 0;
+  var len = xs.u.length;
+  while ((i < len)) {
+    var index = i;
+    var arg1 = xs.get(index);
+    var x$10 = $as_T(arg1);
+    var elem = $m_Lus_zuercher_divvy_EncodedString$().decode__T__T(x$10);
+    var unboxedElem = ((elem === null) ? null : elem);
+    elems$2.push(unboxedElem);
+    i = ((1 + i) | 0)
+  };
+  var debtors = $makeNativeArrayWrapper($d_T.getArrayOf(), elems$2);
+  if ((debtors.u.length === 0)) {
+    return $m_s_None$()
+  };
+  var amountVal = $m_Lus_zuercher_divvy_Amount$().maybeFromString__T__s_Option(amount);
+  if (amountVal.isEmpty__Z()) {
+    return $m_s_None$()
+  };
+  return new $c_s_Some().init___O(new $c_Lus_zuercher_divvy_ExpenseRow().init___T__Lus_zuercher_divvy_Amount__T__sc_Seq(name, $as_Lus_zuercher_divvy_Amount(amountVal.get__O()), desc, $m_s_Predef$().wrapRefArray__AO__scm_WrappedArray(debtors)))
 });
 $c_Lus_zuercher_divvy_ExpenseRow$.prototype.reset__Lorg_scalajs_jquery_JQuery__V = (function(inputRow) {
   (0, $m_Lorg_scalajs_jquery_package$().jQuery$1)("td select[name=\"ex.creditor\"]", inputRow).val(null);
@@ -14511,16 +14559,19 @@ $c_sc_AbstractIterator.prototype.toString__T = (function() {
 $c_sc_AbstractIterator.prototype.foreach__F1__V = (function(f) {
   $s_sc_Iterator$class__foreach__sc_Iterator__F1__V(this, f)
 });
+$c_sc_AbstractIterator.prototype.reduceLeftOption__F2__s_Option = (function(op) {
+  return $s_sc_TraversableOnce$class__reduceLeftOption__sc_TraversableOnce__F2__s_Option(this, op)
+});
 $c_sc_AbstractIterator.prototype.foldLeft__O__F2__O = (function(z, op) {
   return $s_sc_TraversableOnce$class__foldLeft__sc_TraversableOnce__O__F2__O(this, z, op)
-});
-$c_sc_AbstractIterator.prototype.size__I = (function() {
-  return $s_sc_TraversableOnce$class__size__sc_TraversableOnce__I(this)
 });
 $c_sc_AbstractIterator.prototype.toBuffer__scm_Buffer = (function() {
   var this$1 = $m_scm_ArrayBuffer$();
   var cbf = this$1.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom();
   return $as_scm_Buffer($s_sc_TraversableOnce$class__to__sc_TraversableOnce__scg_CanBuildFrom__O(this, cbf))
+});
+$c_sc_AbstractIterator.prototype.size__I = (function() {
+  return $s_sc_TraversableOnce$class__size__sc_TraversableOnce__I(this)
 });
 $c_sc_AbstractIterator.prototype.toStream__sci_Stream = (function() {
   return $s_sc_Iterator$class__toStream__sc_Iterator__sci_Stream(this)
@@ -16569,8 +16620,7 @@ var $d_Lus_zuercher_divvy_Divvy$$anonfun$7 = new $TypeData().initClass({
 $c_Lus_zuercher_divvy_Divvy$$anonfun$7.prototype.$classData = $d_Lus_zuercher_divvy_Divvy$$anonfun$7;
 /** @constructor */
 function $c_Lus_zuercher_divvy_Divvy$$anonfun$9() {
-  $c_sr_AbstractFunction2.call(this);
-  this.$$outer$2 = null
+  $c_sr_AbstractFunction2.call(this)
 }
 $c_Lus_zuercher_divvy_Divvy$$anonfun$9.prototype = new $h_sr_AbstractFunction2();
 $c_Lus_zuercher_divvy_Divvy$$anonfun$9.prototype.constructor = $c_Lus_zuercher_divvy_Divvy$$anonfun$9;
@@ -16580,17 +16630,12 @@ function $h_Lus_zuercher_divvy_Divvy$$anonfun$9() {
 }
 $h_Lus_zuercher_divvy_Divvy$$anonfun$9.prototype = $c_Lus_zuercher_divvy_Divvy$$anonfun$9.prototype;
 $c_Lus_zuercher_divvy_Divvy$$anonfun$9.prototype.apply__sci_Map__Lus_zuercher_divvy_Spend__sci_Map = (function(x0$3, x1$2) {
-  var debtors = (x1$2.debtors$1.isEmpty__Z() ? this.$$outer$2.us$zuercher$divvy$Divvy$$participants$f : x1$2.debtors$1);
-  var splits = x1$2.amount$1.split__I__sc_Seq(debtors.length__I());
+  var splits = x1$2.amount$1.split__I__sc_Seq(x1$2.debtors$1.length__I());
+  var jsx$1 = x1$2.debtors$1;
   var this$1 = $m_sc_Seq$();
-  return $as_sci_Map($as_sc_TraversableOnce(debtors.zip__sc_GenIterable__scg_CanBuildFrom__O(splits, this$1.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).foldLeft__O__F2__O(x0$3, new $c_Lus_zuercher_divvy_Divvy$$anonfun$9$$anonfun$apply$1().init___Lus_zuercher_divvy_Divvy$$anonfun$9(this)))
+  return $as_sci_Map($as_sc_TraversableOnce(jsx$1.zip__sc_GenIterable__scg_CanBuildFrom__O(splits, this$1.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).foldLeft__O__F2__O(x0$3, new $c_Lus_zuercher_divvy_Divvy$$anonfun$9$$anonfun$apply$1().init___Lus_zuercher_divvy_Divvy$$anonfun$9(this)))
 });
 $c_Lus_zuercher_divvy_Divvy$$anonfun$9.prototype.init___Lus_zuercher_divvy_Divvy = (function($$outer) {
-  if (($$outer === null)) {
-    throw new $c_jl_NullPointerException().init___()
-  } else {
-    this.$$outer$2 = $$outer
-  };
   return this
 });
 $c_Lus_zuercher_divvy_Divvy$$anonfun$9.prototype.apply__O__O__O = (function(v1, v2) {
@@ -16927,9 +16972,9 @@ $c_Lus_zuercher_divvy_ExpenseRow.prototype.serialize__T = (function() {
   var jsx$4 = new $c_Lus_zuercher_divvy_EncodedString().init___T(this.amount$1.toString__T());
   var jsx$3 = new $c_Lus_zuercher_divvy_EncodedString().init___T(this.description$1);
   var jsx$2 = this.debtors$1;
-  var jsx$1 = new $c_sjsr_AnonFunction1().init___sjs_js_Function1((function(x$10$2) {
-    var x$10 = $as_T(x$10$2);
-    return new $c_Lus_zuercher_divvy_EncodedString().init___T(x$10).toString__T()
+  var jsx$1 = new $c_sjsr_AnonFunction1().init___sjs_js_Function1((function(x$11$2) {
+    var x$11 = $as_T(x$11$2);
+    return new $c_Lus_zuercher_divvy_EncodedString().init___T(x$11).toString__T()
   }));
   var this$2 = $m_sc_Seq$();
   var array = [jsx$5, jsx$4, jsx$3, $as_sc_TraversableOnce(jsx$2.map__F1__scg_CanBuildFrom__O(jsx$1, this$2.ReusableCBF__scg_GenTraversableFactory$GenericCanBuildFrom())).mkString__T__T(",")];
@@ -23969,6 +24014,9 @@ $c_sc_AbstractTraversable.prototype.mkString__T__T__T__T = (function(start, sep,
 $c_sc_AbstractTraversable.prototype.toString__T = (function() {
   return $s_sc_TraversableLike$class__toString__sc_TraversableLike__T(this)
 });
+$c_sc_AbstractTraversable.prototype.reduceLeftOption__F2__s_Option = (function(op) {
+  return $s_sc_TraversableOnce$class__reduceLeftOption__sc_TraversableOnce__F2__s_Option(this, op)
+});
 $c_sc_AbstractTraversable.prototype.foldLeft__O__F2__O = (function(z, op) {
   return $s_sc_TraversableOnce$class__foldLeft__sc_TraversableOnce__O__F2__O(this, z, op)
 });
@@ -24273,6 +24321,9 @@ $c_sci_StringOps.prototype.toString__T = (function() {
 $c_sci_StringOps.prototype.foreach__F1__V = (function(f) {
   $s_sc_IndexedSeqOptimized$class__foreach__sc_IndexedSeqOptimized__F1__V(this, f)
 });
+$c_sci_StringOps.prototype.reduceLeftOption__F2__s_Option = (function(op) {
+  return $s_sc_TraversableOnce$class__reduceLeftOption__sc_TraversableOnce__F2__s_Option(this, op)
+});
 $c_sci_StringOps.prototype.foldLeft__O__F2__O = (function(z, op) {
   var $$this = this.repr$1;
   return $s_sc_IndexedSeqOptimized$class__foldl__p0__sc_IndexedSeqOptimized__I__I__O__F2__O(this, 0, $uI($$this.length), z, op)
@@ -24556,6 +24607,9 @@ $c_scm_ArrayOps$ofRef.prototype.toString__T = (function() {
 });
 $c_scm_ArrayOps$ofRef.prototype.foreach__F1__V = (function(f) {
   $s_sc_IndexedSeqOptimized$class__foreach__sc_IndexedSeqOptimized__F1__V(this, f)
+});
+$c_scm_ArrayOps$ofRef.prototype.reduceLeftOption__F2__s_Option = (function(op) {
+  return $s_sc_TraversableOnce$class__reduceLeftOption__sc_TraversableOnce__F2__s_Option(this, op)
 });
 $c_scm_ArrayOps$ofRef.prototype.foldLeft__O__F2__O = (function(z, op) {
   var $$this = this.repr$1;
@@ -31542,6 +31596,10 @@ $c_scm_ListBuffer.prototype.foreach__F1__V = (function(f) {
     f.apply__O__O(these.head__O());
     these = $as_sci_List(these.tail__O())
   }
+});
+$c_scm_ListBuffer.prototype.reduceLeftOption__F2__s_Option = (function(op) {
+  var this$1 = this.scala$collection$mutable$ListBuffer$$start$6;
+  return $s_sc_TraversableOnce$class__reduceLeftOption__sc_TraversableOnce__F2__s_Option(this$1, op)
 });
 $c_scm_ListBuffer.prototype.foldLeft__O__F2__O = (function(z, op) {
   var this$1 = this.scala$collection$mutable$ListBuffer$$start$6;
