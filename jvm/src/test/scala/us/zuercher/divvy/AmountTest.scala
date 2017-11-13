@@ -29,16 +29,16 @@ class AmountTest extends FunSpec with Matchers {
 
       it("should add mixed sign amounts") {
         Amount(100) + Amount(-199) should equal(Amount(-99))
-	Amount(100) + Amount(-99) should equal(Amount(1))
-	Amount(-100) + Amount(199) should equal(Amount(99))
-	Amount(-100) + Amount(99) should equal(Amount(-1))
+        Amount(100) + Amount(-99) should equal(Amount(1))
+        Amount(-100) + Amount(199) should equal(Amount(99))
+        Amount(-100) + Amount(99) should equal(Amount(-1))
       }
     }
 
     describe("subtraction") {
       it("should subtract positive amounts") {
         Amount(200) - Amount(99) should equal(Amount(101))
-	Amount(200) - Amount(299) should equal(Amount(-99))
+        Amount(200) - Amount(299) should equal(Amount(-99))
       }
 
       it("should subtract negative amounts") {
@@ -48,7 +48,7 @@ class AmountTest extends FunSpec with Matchers {
 
       it("should should subtract mixed sign amounts") {
         Amount(100) - Amount(-199) should equal(Amount(299))
-	Amount(-100) - Amount(199) should equal(Amount(-299))
+        Amount(-100) - Amount(199) should equal(Amount(-299))
       }
     }
 
@@ -91,14 +91,14 @@ class AmountTest extends FunSpec with Matchers {
 
       it("should handle the case where division rounded down") {
         Amount(1000).split(3) should contain theSameElementsAs(
-	  Seq(Amount(333), Amount(333), Amount(334))
-	)
+          Seq(Amount(333), Amount(333), Amount(334))
+        )
       }
 
       it("should handle the case where division rounded up") {
         Amount(2000).split(3) should contain theSameElementsAs(
           Seq(Amount(667), Amount(667), Amount(666))
-	)
+        )
       }
 
       it("should should handle splitting nothing") {
@@ -108,27 +108,27 @@ class AmountTest extends FunSpec with Matchers {
       it("should handle splitting where some splits are zero") {
         Amount(1).split(4) should contain theSameElementsAs(
           Seq(Amount.zero, Amount.zero, Amount.zero, Amount.cent)
-	)
+        )
       }
     }
 
     describe("comparisons") {
       it("should compare >") {
         Amount.cent > Amount.zero should equal(true)
-	Amount(100) > Amount.zero should equal(true)
-	Amount(100) > Amount(-100) should equal(true)
-	Amount.zero > Amount.cent should equal(false)
-	Amount.zero > Amount(100) should equal(false)
-	Amount(-100) > Amount(100) should equal(false)
+        Amount(100) > Amount.zero should equal(true)
+        Amount(100) > Amount(-100) should equal(true)
+        Amount.zero > Amount.cent should equal(false)
+        Amount.zero > Amount(100) should equal(false)
+        Amount(-100) > Amount(100) should equal(false)
       }
 
       it("should compare <") {
-	Amount.zero < Amount.cent should equal(true)
-	Amount.zero < Amount(100) should equal(true)
-	Amount(-100) < Amount(100) should equal(true)
+        Amount.zero < Amount.cent should equal(true)
+        Amount.zero < Amount(100) should equal(true)
+        Amount(-100) < Amount(100) should equal(true)
         Amount.cent < Amount.zero should equal(false)
-	Amount(100) < Amount.zero should equal(false)
-	Amount(100) < Amount(-100) should equal(false)
+        Amount(100) < Amount.zero should equal(false)
+        Amount(100) < Amount(-100) should equal(false)
       }
     }
 
