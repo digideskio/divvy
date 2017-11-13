@@ -11,7 +11,6 @@ object DOM {
     jQuery("button.add_creditor").click(() => addNewCreditorRow())
     jQuery("button.add_expense").click(() => addNewExpenseRow())
     jQuery("button.restart").click(() => {
-      println("what")
       dom.window.location.href = "%s%s".format(
         dom.window.location.origin,
         dom.window.location.pathname
@@ -21,9 +20,11 @@ object DOM {
       event.preventDefault()
       false
     })
+    jQuery("""form#ex select[name="ex.debtors"]""").change(ExpenseRow.handleDebtorSelect _)
 
     jQuery("button.add_expense").attr("disabled", "disabled")
 
+    // Load data from the URL.
     val href = dom.window.location.href.toString()
     val query = href.dropWhile(_ != '?').drop(1)
     val params = query.split('&').map(param => {

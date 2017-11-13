@@ -1,7 +1,7 @@
 package us.zuercher.divvy
 
 import org.scalajs.jquery.{JQuery, jQuery}
-import org.scalajs.dom.{Element, Event}
+import org.scalajs.dom
 import scala.scalajs.js
 
 object ExpenseRow {
@@ -67,16 +67,28 @@ object ExpenseRow {
           creditors
             .filter { _.isParticipant }
             .map { c => jQuery(expenseMemberTemplate.format(c.name)) }: _*))
-    debtInput.value(js.Array(debtors: _*)).change(() => DOM.updateExpenses())
+    debtInput.value(js.Array(debtors: _*)).change((event: dom.Event) => {
+      handleDebtorSelect(event)
+      DOM.updateExpenses()
+    })
 
     newRow.insertBefore(inputRow)
-    jQuery("button.remove_expense", newRow).click((event: Event) => DOM.removeExpenseRow(event))
+    jQuery("button.remove_expense", newRow).click((event: dom.Event) => DOM.removeExpenseRow(event))
+  }
+
+  // Make sure the "all participants" value is mutually exclusive to other debtors.
+  def handleDebtorSelect(event: dom.Event) {
+    val target = jQuery(event.target)
+    val values = target.value().asInstanceOf[js.Array[String]]
+    if (values.length > 1 && values.contains(allDebtorsValue)) {
+      target.value(values.filter(_ != allDebtorsValue))
+    }
   }
 
   def all: Seq[ExpenseRow] = {
     val rows = jQuery("""table#expenses tbody tr[class!="input"]""")
     var c = Seq[ExpenseRow]()
-    rows.each((row: Element) => {
+    rows.each((row: dom.Element) => {
       val creditor = jQuery("""td select[name="ex.creditor"]""", row).value().toString()
       val amount =
         Amount.maybeFromString(
@@ -92,7 +104,7 @@ object ExpenseRow {
   }
 
   def update(creditorNames: Seq[String], debtorNames: Seq[String]) {
-    jQuery("table#expenses tbody tr").each((row: Element) => {
+    jQuery("table#expenses tbody tr").each((row: dom.Element) => {
       val credInput = jQuery("""select[name="ex.creditor"]""", row)
       val currentCreditor = Option(credInput.value()).map(_.toString).getOrElse("")
 
