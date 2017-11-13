@@ -9,13 +9,18 @@ case class Spend(
   debtors: Seq[String])
 
 object Spend {
-  def parse(file: String): (Seq[String], Seq[Spend]) = parse(file)
+  def parse(file: String): Seq[Spend] = parse(file)
 
-  def parse(file: File): (Seq[String], Seq[Spend]) = parse(new FileReader(file))
+  def parse(file: File): Seq[Spend] = parse(new FileReader(file))
 
-  def parse(input: Reader): (Seq[String], Seq[Spend]) = {
+  def parse(input: Reader): Seq[Spend] = {
     try {
-      new Parser().parseDoc(input)
+      val (participants, spend) = new Parser().parseDoc(input)
+
+      spend.map {
+        case Spend(cred, amt, desc, debtors) if debtors.isEmpty =>
+          Spend(cred, amt, desc, participants)
+      }
     }
     catch {
       case e: ParserFailure =>

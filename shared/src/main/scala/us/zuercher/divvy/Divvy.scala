@@ -13,28 +13,25 @@ case class Relationship(debtor: String, creditor: String)
 case class Payment(parties: Relationship, amount: Amount)
 
 object Divvy {
-  def apply(participants: Seq[String], spend: Seq[Spend], verbose: Boolean): Seq[Payment] = {
-    val d = new Divvy(participants, spend, verbose)
-    d()
+  def apply(spend: Seq[Spend], verbose: Boolean): Seq[Payment] = {
+    new Divvy(spend, verbose).apply()
   }
 }
 
-class Divvy(participants: Seq[String], rawSpend: Seq[Spend], verbose: Boolean = false) {
+class Divvy(rawSpend: Seq[Spend], verbose: Boolean = false) {
   Amount.reset()
 
+  // Ignore expenses only involving one party or that have no debtors.
   val spend = rawSpend.filter {
     case Spend(c, _, _, d) if d.size == 1 => c != d.head
-    case _ => true
+    case Spend(_, _, _, d) => d.nonEmpty
   }
 
-  require(
-    spend.flatMap { _.debtors }.distinct.diff(participants).isEmpty,
-    "debtors must be participants"
-  )
+  val participants = spend.flatMap(_.debtors)
 
   val nonParticipants = spend.map { _.creditor }.distinct.diff(participants)
 
-  val totalSpent = spend.map { _.amount }.reduceLeft { _ + _ }
+  val totalSpent = spend.map { _.amount }.reduceLeftOption { _ + _ }.getOrElse(Amount.zero)
 
   val spentPerPerson =
     spend.foldLeft(Map.empty[String, Amount]) { case (m, spend) =>
@@ -44,11 +41,9 @@ class Divvy(participants: Seq[String], rawSpend: Seq[Spend], verbose: Boolean = 
 
   val participantShares =
     spend.foldLeft(Map.empty[String, Amount]) { case (m, spend) =>
-      val debtors = if (spend.debtors.isEmpty) participants else spend.debtors
+      val splits = spend.amount.split(spend.debtors.length)
 
-      val splits = spend.amount.split(debtors.length)
-
-      debtors.zip(splits).foldLeft(m) { case (m, (name, split)) =>
+      spend.debtors.zip(splits).foldLeft(m) { case (m, (name, split)) =>
         val current = m.getOrElse(name, Amount.zero)
         val updated = current + split
         m + (name -> updated)
@@ -60,14 +55,14 @@ class Divvy(participants: Seq[String], rawSpend: Seq[Spend], verbose: Boolean = 
   val shares = participantShares ++ nonParticipantShares
 
   val (debtors, creditors) = {
-    val nets =
+    val netsOwed =
       shares.map { case (name, share) =>
         val spent = spentPerPerson.getOrElse(name, Amount.zero)
         name -> (share - spent)
       }
 
     val (d, c) =
-      nets.filter {
+      netsOwed.filter {
         case (_, net) => net != Amount.zero
       }.partition {
         case (_, net) => net > Amount.zero
@@ -79,9 +74,9 @@ class Divvy(participants: Seq[String], rawSpend: Seq[Spend], verbose: Boolean = 
     )
   }
 
-  val totalDebt = debtors.map { _.amount }.reduceLeft { _ + _ }
+  val totalDebt = debtors.map { _.amount }.reduceLeftOption { _ + _ }.getOrElse(Amount.zero)
 
-  val totalCredit = creditors.map { _.amount}.reduceLeft { _ + _ }
+  val totalCredit = creditors.map { _.amount}.reduceLeftOption { _ + _ }.getOrElse(Amount.zero)
 
   def apply(): Seq[Payment] = {
     echo(s"Total Spent: $totalSpent")

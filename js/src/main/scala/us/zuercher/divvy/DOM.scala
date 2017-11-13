@@ -167,7 +167,7 @@ object DOM {
     }).sortWith(spendComparator)
 
     if (spend.nonEmpty) {
-      val payments = Divvy(participants, spend, false)
+      val payments = Divvy(spend, false)
 
       val paymentsByDebtor = payments.groupBy(_.parties.debtor)
 
