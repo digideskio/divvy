@@ -89,6 +89,16 @@ class AmountTest extends FunSpec with Matchers {
         Amount(1000).split(4) should equal(Seq.fill(4)(Amount(250)))
       }
 
+      it("should should handle splitting nothing") {
+        Amount.zero.split(2) should equal(Seq(Amount.zero, Amount.zero))
+      }
+
+      it("should handle splitting where some splits are zero") {
+        Amount(1).split(4) should contain theSameElementsAs(
+          Seq(Amount.zero, Amount.zero, Amount.zero, Amount.cent)
+        )
+      }
+
       it("should handle the case where division rounded down") {
         Amount(1000).split(3) should contain theSameElementsAs(
           Seq(Amount(333), Amount(333), Amount(334))
@@ -101,14 +111,21 @@ class AmountTest extends FunSpec with Matchers {
         )
       }
 
-      it("should should handle splitting nothing") {
-        Amount.zero.split(2) should equal(Seq(Amount.zero, Amount.zero))
+      it("should return different split orderings on successive calls") {
+        Amount.reset()
+        val first = Amount(100).split(6)
+        val second = Amount(100).split(6)
+
+        first should not equal(second)
       }
 
-      it("should handle splitting where some splits are zero") {
-        Amount(1).split(4) should contain theSameElementsAs(
-          Seq(Amount.zero, Amount.zero, Amount.zero, Amount.cent)
-        )
+      it("should return the same split ordering across calls to reset") {
+        Amount.reset()
+        val first = Amount(100).split(3)
+        Amount.reset()
+        val second = Amount(100).split(3)
+
+        first should equal(second)
       }
     }
 
